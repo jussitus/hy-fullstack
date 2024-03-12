@@ -1,6 +1,25 @@
 import personService from './services/persons'
 import { useEffect, useState } from 'react'
 
+const Notification = ({ message, error }) => {
+  let style = {
+    fontSize: '1.5em',
+    border: 'solid',
+    padding: '0.25em',
+    marginBottom: '1em',
+  }
+  style.color = error ? 'red' : 'green'
+
+  if (message === null) {
+    return null
+  }
+  return (
+    <div style={style}>{message}</div>
+  )
+}
+
+
+
 const Person = ({ person }) => {
   return (
     <>{person.name} {person.number}</>
@@ -42,6 +61,8 @@ const App = () => {
   const [newName, setNewName] = useState('')
   const [newNumber, setNewNumber] = useState('')
   const [searchword, setSearchword] = useState('')
+  const [notification, setNotification] = useState(null)
+  const [error, setError] = useState(false)
 
   useEffect(() => {
     personService.getAllPersons()
@@ -73,6 +94,7 @@ const App = () => {
         personService.updatePerson(id, personObject)
           .then(returnedPerson => setPersons(persons.filter(person => person.id !== id).concat(returnedPerson)))
           .then(() => {
+            setNotification('Updated ' + newName)
             setNewName('')
             setNewNumber('')
           })
@@ -82,26 +104,36 @@ const App = () => {
     personService.createPerson(personObject)
       .then(returnedPerson => setPersons(persons.concat(returnedPerson)))
       .then(() => {
+        setNotification('Added ' + newName)
         setNewName('')
         setNewNumber('')
       })
+    setTimeout(() => setNotification(null), 5000)
   }
 
   const deletePerson = (event) => {
     let id = event.target.value
-    if (!confirm(`Really delete ${persons.find(person => person.id === id).name}?`)) {
+    let name = persons.find(person => person.id === id).name
+    if (!confirm(`Really delete ${name}?`)) {
       return
     }
     personService.deletePerson(id)
       .then(deletedPerson => {
+        setNotification('Deleted ' + name)
         setPersons(persons.filter(person => deletedPerson.id !== person.id))
       })
-      .catch(error => console.log('tried to delete nonexistent person'))
+      .catch(e => {
+        console.log('error: tried to delete person, but person not found')
+        setNotification(name + ' already deleted from the server')
+        setError(true)
+      })
+    setTimeout(() => { setNotification(null); setError(false) }, 5000)
 
   }
   return (
     <div>
       <h2>Phonebook</h2>
+      <Notification message={notification} error={error} />
       <Filter handleSearchwordChange={handleSearchwordChange} />
       <h2>add new</h2>
       <PersonForm newName={newName} newNumber={newNumber} addPerson={addPerson} handleNameChange={handleNameChange} handleNumberChange={handleNumberChange} />
