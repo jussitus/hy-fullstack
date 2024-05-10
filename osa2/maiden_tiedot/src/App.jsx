@@ -7,6 +7,9 @@ function App() {
   const handleSearchwordChange = (event) => {
     setSearchword(event.target.value)
   }
+  const handleCountryClick = (event) => {
+    setSearchword
+  }
   useEffect(() => {
     countryService.getAllCountries().then(x => setData(x))
   }
@@ -14,9 +17,8 @@ function App() {
 
   return (
     <>
-    hey
     <div><Filter handleSearchwordChange={handleSearchwordChange}/></div>
-    <div><Countries data={data} searchword={searchword}/></div>
+    <div><Countries data={data} searchword={searchword} setSearchword={setSearchword}/></div>
     </>
   )
 }

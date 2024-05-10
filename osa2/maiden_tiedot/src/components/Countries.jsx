@@ -1,8 +1,8 @@
-export const Countries = ({ data, searchword }) => {
+export const Countries = ({ data, searchword, setSearchword }) => {
     let filtered = data.filter(e => e.name.common.toLowerCase().includes(searchword.toLowerCase()))
     if (filtered.length > 1) {
         return (
-            <><CountryList countries={filtered} /></>
+            <><CountryList countries={filtered} setSearchword={setSearchword} /></>
         )
     }
     if (filtered.length === 1) {
@@ -36,8 +36,8 @@ const Country = ({ country }) => {
     )
 }
 
-const CountryList = ({ countries }) => {
+const CountryList = ({ countries, setSearchword}) => {
     return (
-        <ul>{countries.map(country => <li>{country.name.common}</li>)}</ul>
+        <ul>{countries.map(country => <li>{country.name.common} <button onClick={() => setSearchword(country.name.common)}>show</button></li>)}</ul>
     )
 }
