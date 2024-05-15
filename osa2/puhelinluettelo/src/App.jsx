@@ -1,60 +1,9 @@
+import { Notification } from './components/Notification'
 import personService from './services/persons'
 import { useEffect, useState } from 'react'
-
-const Notification = ({ message, error }) => {
-  let style = {
-    fontSize: '1.5em',
-    border: 'solid',
-    padding: '0.25em',
-    marginBottom: '1em',
-  }
-  style.color = error ? 'red' : 'green'
-
-  if (message === null) {
-    return null
-  }
-  return (
-    <div style={style}>{message}</div>
-  )
-}
-
-
-
-const Person = ({ person }) => {
-  return (
-    <>{person.name} {person.number}</>
-  )
-}
-
-const Persons = ({ persons, searchword, deletePerson }) => {
-  return (
-    <>
-      <ul>
-        {persons.filter(person => person.name.toLowerCase().includes(searchword.toLowerCase())).map(person => <li key={person.id}>
-          <Person person={person} /> <button type="submit" value={person.id} onClick={deletePerson}>delete</button>
-        </li>)}
-      </ul>
-    </>
-  )
-}
-
-const Filter = ({ handleSearchwordChange }) => {
-  return (
-    <>filter <input onChange={handleSearchwordChange} /></>
-  )
-}
-
-const PersonForm = ({ newName, newNumber, addPerson, handleNameChange, handleNumberChange }) => {
-  return (
-    <>
-      <form onSubmit={addPerson}>
-        <div>name: <input value={newName} onChange={handleNameChange} /></div>
-        <div>number: <input value={newNumber} onChange={handleNumberChange} /></div>
-        <div><button type="submit">add</button></div>
-      </form>
-    </>
-  )
-}
+import { Persons } from './components/Persons'
+import { Filter } from './components/Filter'
+import { PersonForm } from './components/PersonForm'
 
 const App = () => {
   const [persons, setPersons] = useState([])
@@ -112,15 +61,15 @@ const App = () => {
   }
 
   const deletePerson = (event) => {
-    let id = event.target.value
+    let id = Number(event.target.value)
     let name = persons.find(person => person.id === id).name
     if (!confirm(`Really delete ${name}?`)) {
       return
     }
     personService.deletePerson(id)
-      .then(deletedPerson => {
+      .then(() => {
         setNotification('Deleted ' + name)
-        setPersons(persons.filter(person => deletedPerson.id !== person.id))
+        setPersons(persons.filter(person => id !== person.id))
       })
       .catch(e => {
         console.log('error: tried to delete person, but person not found')
@@ -128,7 +77,6 @@ const App = () => {
         setError(true)
       })
     setTimeout(() => { setNotification(null); setError(false) }, 5000)
-
   }
   return (
     <div>
