@@ -57,17 +57,26 @@ const App = () => {
         setNewName('')
         setNewNumber('')
       })
-    setTimeout(() => setNotification(null), 5000)
+      .catch(error => {
+        setNotification(error.response.data.error)
+        setError(true)
+        setNewName('')
+        setNewNumber('')
+      })
+    setTimeout(() => {setNotification(null); setError(false)}, 10000)
   }
 
   const deletePerson = (event) => {
-    let id = Number(event.target.value)
+    let id = event.target.value
+    console.log(persons)
+    console.log(id)
     let name = persons.find(person => person.id === id).name
     if (!confirm(`Really delete ${name}?`)) {
       return
     }
     personService.deletePerson(id)
       .then(() => {
+        console.log("are were there yet")
         setNotification('Deleted ' + name)
         setPersons(persons.filter(person => id !== person.id))
       })
@@ -76,7 +85,8 @@ const App = () => {
         setNotification(name + ' already deleted from the server')
         setError(true)
       })
-    setTimeout(() => { setNotification(null); setError(false) }, 5000)
+    console.log(persons)
+    setTimeout(() => { setNotification(null); setError(false) }, 10000)
   }
   return (
     <div>
