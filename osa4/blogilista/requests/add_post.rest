@@ -1,0 +1,9 @@
+POST http://localhost:3003/api/blogs 
+Content-Type: application/json
+
+{
+    "title": "Things are fine, people.",
+    "author": "Matt Mansfield",
+    "url": "google.com",
+    "likes": 10
+}
