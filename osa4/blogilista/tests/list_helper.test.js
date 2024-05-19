@@ -39,10 +39,22 @@ describe('mostBlogs', () => {
   test('empty list returns null', () => {
     assert.strictEqual(listHelper.mostBlogs([]), null)
   })
-  test('list of one blogs returns author with one blog', () => {
+  test('list of one blog returns author', () => {
     assert.deepStrictEqual(listHelper.mostBlogs(test_data.one_blog), { author: 'Example author', blogs: 1 })
   })
-  test('list of many authors returns author with most blogs', () => {
+  test('list of many blogs returns author with most blogs', () => {
     assert.deepStrictEqual(listHelper.mostBlogs(test_data.many_blogs), { author: 'Robert C. Martin', blogs: 3 })
+  })
+})
+
+describe('mostLikes', () => {
+  test('empty list returns null', () => {
+    assert.strictEqual(listHelper.mostLikes([]), null)
+  })
+  test('list of one blog returns author', () => {
+    assert.deepStrictEqual(listHelper.mostLikes(test_data.one_blog), { author: 'Example author', likes: 10 })
+  })
+  test('list of many blogs returns author with most likes', () => {
+    assert.deepStrictEqual(listHelper.mostLikes(test_data.many_blogs), { author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })
