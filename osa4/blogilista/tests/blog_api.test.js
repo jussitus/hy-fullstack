@@ -57,6 +57,13 @@ test('adding new blog without title or url results in 400', async () => {
  
 })
 
+test('deleting a blog', async () => {
+  const idToDelete = (await api.get('/api/blogs')).body[0].id
+  await api.delete(`/api/blogs/${idToDelete}`).expect(204)
+  const blogs = (await api.get('/api/blogs')).body
+  assert(blogs.every(blog => blog.id !== idToDelete))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
