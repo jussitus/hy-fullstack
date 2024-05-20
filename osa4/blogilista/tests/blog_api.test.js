@@ -50,11 +50,11 @@ test('adding new blog wihout likes property sets likes at 0', async () => {
 })
 
 test('adding new blog without title or url results in 400', async () => {
-  const withoutUrl = { author: 'author1', title: 'title1', likes: 100}
+  const withoutUrl = { author: 'author1', title: 'title1', likes: 100 }
   const withoutTitle = { author: 'author1', url: 'url1', likes: 100 }
   await api.post('/api/blogs').send(withoutUrl).expect(400)
   await api.post('/api/blogs').send(withoutTitle).expect(400)
- 
+
 })
 
 test('deleting a blog', async () => {
@@ -62,6 +62,33 @@ test('deleting a blog', async () => {
   await api.delete(`/api/blogs/${idToDelete}`).expect(204)
   const blogs = (await api.get('/api/blogs')).body
   assert(blogs.every(blog => blog.id !== idToDelete))
+})
+
+test('deleting a nonexistent blog', async () => {
+  const idToDelete = (await api.get('/api/blogs')).body[0].id
+  await api.delete(`/api/blogs/${idToDelete}`)
+  const afterOneDelete = (await api.get('/api/blogs')).body
+  assert.strictEqual(afterOneDelete.length, 5)
+  await api.delete(`/api/blogs/${idToDelete}`).expect(204)
+  const afterTwoDeletes = (await api.get('/api/blogs')).body
+  assert.strictEqual(afterTwoDeletes.length, 5)
+})
+
+test('updating a blog', async () => {
+  const blogToUpdate = (await api.get('/api/blogs')).body[0]
+  blogToUpdate.likes = 100
+  await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate)
+  const blogs = (await api.get('/api/blogs')).body
+  assert(blogs.some(blog => blog.id === blogToUpdate.id && blog.likes === 100))
+})
+
+test('updating a nonexistent blog', async () => {
+  const blogToUpdate = (await api.get('/api/blogs')).body[0]
+  blogToUpdate.likes = 100
+  await api.delete(`/api/blogs/${blogToUpdate.id}`)
+  await api.put(`/api/blogs/${blogToUpdate.id}`).send(blogToUpdate)
+  const blogs = (await api.get('/api/blogs')).body
+  assert(blogs.every(blog => blog.likes !== 100))
 })
 
 after(async () => {
