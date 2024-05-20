@@ -16,10 +16,10 @@ describe('totalLikes', () => {
     assert.strictEqual(listHelper.totalLikes([]), 0)
   })
   test('list of one blog returns its likes', () => {
-    assert.strictEqual(listHelper.totalLikes(test_data.one_blog), 10)
+    assert.strictEqual(listHelper.totalLikes(test_data.oneBlog), 10)
   })
   test('list of many blogs returns sum of their likes', () => {
-    assert.strictEqual(listHelper.totalLikes(test_data.many_blogs), 36)
+    assert.strictEqual(listHelper.totalLikes(test_data.manyBlogs), 36)
   })
 })
 
@@ -28,10 +28,10 @@ describe('favoriteBlog', () => {
     assert.strictEqual(listHelper.favoriteBlog([]), null)
   })
   test('list of one blog return blog', () => {
-    assert.strictEqual(listHelper.favoriteBlog(test_data.one_blog), test_data.one_blog[0])
+    assert.strictEqual(listHelper.favoriteBlog(test_data.oneBlog), test_data.oneBlog[0])
   })
   test('list of many blogs returns one with most likes', () => {
-    assert.strictEqual(listHelper.favoriteBlog(test_data.many_blogs), test_data.many_blogs[2])
+    assert.strictEqual(listHelper.favoriteBlog(test_data.manyBlogs), test_data.manyBlogs[2])
   })
 })
 
@@ -40,10 +40,10 @@ describe('mostBlogs', () => {
     assert.strictEqual(listHelper.mostBlogs([]), null)
   })
   test('list of one blog returns author', () => {
-    assert.deepStrictEqual(listHelper.mostBlogs(test_data.one_blog), { author: 'Example author', blogs: 1 })
+    assert.deepStrictEqual(listHelper.mostBlogs(test_data.oneBlog), { author: 'Example author', blogs: 1 })
   })
   test('list of many blogs returns author with most blogs', () => {
-    assert.deepStrictEqual(listHelper.mostBlogs(test_data.many_blogs), { author: 'Robert C. Martin', blogs: 3 })
+    assert.deepStrictEqual(listHelper.mostBlogs(test_data.manyBlogs), { author: 'Robert C. Martin', blogs: 3 })
   })
 })
 
@@ -52,9 +52,9 @@ describe('mostLikes', () => {
     assert.strictEqual(listHelper.mostLikes([]), null)
   })
   test('list of one blog returns author', () => {
-    assert.deepStrictEqual(listHelper.mostLikes(test_data.one_blog), { author: 'Example author', likes: 10 })
+    assert.deepStrictEqual(listHelper.mostLikes(test_data.oneBlog), { author: 'Example author', likes: 10 })
   })
   test('list of many blogs returns author with most likes', () => {
-    assert.deepStrictEqual(listHelper.mostLikes(test_data.many_blogs), { author: 'Edsger W. Dijkstra', likes: 17 })
+    assert.deepStrictEqual(listHelper.mostLikes(test_data.manyBlogs), { author: 'Edsger W. Dijkstra', likes: 17 })
   })
 })

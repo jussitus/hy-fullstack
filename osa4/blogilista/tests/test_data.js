@@ -1,11 +1,11 @@
-const one_blog = [{
+const oneBlog = [{
   title: 'Example title',
   author: 'Example author',
   url: 'Example url',
   likes: 10
 }]
 
-const many_blogs = [
+const manyBlogs = [
   {
     _id: '5a422a851b54a676234d17f7',
     title: 'React patterns',
@@ -56,4 +56,4 @@ const many_blogs = [
   }
 ]
 
-module.exports = { one_blog,many_blogs }
+module.exports = { oneBlog,manyBlogs }

@@ -1,5 +1,6 @@
 const config = require('./utils/config')
 const express = require('express')
+require('express-async-errors')
 const app = express()
 const cors = require('cors')
 const blogsRouter = require('./controllers/blogs')
@@ -27,7 +28,7 @@ app.use(express.json())
 morgan.token('content', ((req) => { return req.method === 'POST' ? JSON.stringify(req.body) : '' }))
 app.use(morgan(':method :url :status :res[content-length] - :response-time ms :content'))
 app.use('/', blogsRouter)
-//app.use(middleware.unknownEndpoint)
+app.use(middleware.unknownEndpoint)
 app.use(middleware.errorHandler)
 
 module.exports = app
