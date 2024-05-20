@@ -31,6 +31,18 @@ test('blog id property named correctly', async () => {
   assert(Object.hasOwn(blogs.body[0], 'id'))
 })
 
+test('adding new blog', async () => {
+  const newBlog = { author: 'author1', title: 'title1', url: 'url1', likes: 0 }
+  await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+  const blogs = (await api.get('/api/blogs')).body
+  assert.strictEqual(blogs.length, 7)
+  assert(blogs.some(blog => {
+    return Object.values(newBlog).every(property => {
+      return Object.values(blog).includes(property)
+    })
+  }))
+})
+
 after(async () => {
   await mongoose.connection.close()
 })
