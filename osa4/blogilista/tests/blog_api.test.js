@@ -92,5 +92,6 @@ test('updating a nonexistent blog', async () => {
 })
 
 after(async () => {
+  await Blog.deleteMany({})
   await mongoose.connection.close()
 })
