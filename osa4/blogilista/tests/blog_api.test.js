@@ -32,7 +32,7 @@ test('blog id property named correctly', async () => {
 })
 
 test('adding new blog', async () => {
-  const newBlog = { author: 'author1', title: 'title1', url: 'url1', likes: 0 }
+  const newBlog = { author: 'author1', title: 'title1', url: 'url1', likes: 100 }
   await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
   const blogs = (await api.get('/api/blogs')).body
   assert.strictEqual(blogs.length, 7)
@@ -41,6 +41,20 @@ test('adding new blog', async () => {
       return Object.values(blog).includes(property)
     })
   }))
+})
+
+test('adding new blog wihout likes property sets likes at 0', async () => {
+  const newBlog = { author: 'author1', title: 'title1', url: 'url1' }
+  const response = await api.post('/api/blogs').send(newBlog).expect(201).expect('Content-Type', /application\/json/)
+  assert.strictEqual(response.body.likes, 0)
+})
+
+test('adding new blog without title or url results in 400', async () => {
+  const withoutUrl = { author: 'author1', title: 'title1', likes: 100}
+  const withoutTitle = { author: 'author1', url: 'url1', likes: 100 }
+  await api.post('/api/blogs').send(withoutUrl).expect(400)
+  await api.post('/api/blogs').send(withoutTitle).expect(400)
+ 
 })
 
 after(async () => {
