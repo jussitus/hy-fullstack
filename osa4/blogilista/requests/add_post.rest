@@ -1,6 +1,6 @@
 POST http://localhost:3003/api/blogs 
 Content-Type: application/json
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI2NjRiZDEwMjdkZjVmYWMzM2I5MmY0NGEiLCJpYXQiOjE3MTYyNTExMTMsImV4cCI6MTcxNjI1NDcxM30.YU-z7Drz2z6IlfSaw_aM_l_Aeb8ViY387X-eoVJpGUY
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI2NjRjMDZiYmM4ZTdjOTYyYjIyMmRiZGUiLCJpYXQiOjE3MTYyNTg0OTUsImV4cCI6MTcxNjI2MjA5NX0.078ibxz_J1Etp2GfWeJE4gHl04sNvJFy-ka-ATGWlds
 
 {
     "title": "Things are fine, people.",

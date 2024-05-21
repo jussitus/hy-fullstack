@@ -24,6 +24,9 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
 
 blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) => {
   const blogToDelete = await Blog.findOne({ _id: request.params.id })
+  if (!blogToDelete) {
+    return response.status(204).end()
+  }
   if (request.user.id.toString() !== blogToDelete.user.toString()) {
     return response.status(401).json({ error: 'token invalid' })
   }
@@ -31,8 +34,22 @@ blogsRouter.delete('/:id', middleware.userExtractor, async (request, response) =
   response.status(204).end()
 })
 
-blogsRouter.put('/:id', async (request, response) => {
-  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, request.body, { new: true })
+blogsRouter.put('/:id', middleware.userExtractor, async (request, response) => {
+  const blogToUpdate = await Blog.findOne({ _id: request.params.id })
+  if (!blogToUpdate) {
+    return response.status(204).end()
+  }
+  if (request.user.id.toString() !== blogToUpdate.user.toString()) {
+    return response.status(401).json({ error: 'token invalid' })
+  }
+
+  const blog = {
+    author: request.body.author,
+    title: request.body.title,
+    url: request.body.url,
+    likes: request.body.likes
+  }
+  const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, { new: true })
   response.json(updatedBlog)
 })
 
