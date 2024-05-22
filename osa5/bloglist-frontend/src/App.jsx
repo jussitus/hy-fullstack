@@ -58,13 +58,22 @@ const App = () => {
   }
 
   const createBlog = async (blogObject) => {
-    const returnedBlog = await blogService.create(blogObject)
-    setBlogs(blogs.concat(returnedBlog))
-    setMessage(`New blog added: ${returnedBlog.title} by ${returnedBlog.author}`)
-    setTimeout(() => {
-      setMessage(null)
-    }, 5000)
-
+    try {
+      const returnedBlog = await blogService.create(blogObject)
+      setBlogs(blogs.concat(returnedBlog))
+      setMessage(`New blog added: ${returnedBlog.title} by ${returnedBlog.author}`)
+      setTimeout(() => {
+        setMessage(null)
+      }, 5000)
+    } catch (exception) {
+      console.log(exception)
+      setMessage('Title, author or url missing')
+      setError(true)
+      setTimeout(() => {
+        setMessage(null)
+        setError(false)
+      }, 5000)
+    }
   }
 
   const updateBlog = async (blogObject) => {
@@ -72,7 +81,7 @@ const App = () => {
     const updatedBlogs = [...blogs]
     const index = updatedBlogs.findIndex(blog => blog.id === returnedBlog.id)
     updatedBlogs[index] = returnedBlog
-    setBlogs(updatedBlogs.toSorted((a,b) => b.likes - a.likes))
+    setBlogs(updatedBlogs.toSorted((a, b) => b.likes - a.likes))
   }
 
   const removeBlog = async (blogObject) => {
@@ -84,17 +93,17 @@ const App = () => {
     <div>
       <Notification message={message} error={error} />
 
-      {!user && LoginForm(username, password, handleLogin, setUsername, setPassword)}
+      {!user && <LoginForm username={username} password={password} handleLogin={handleLogin} setUsername={setUsername} setPassword={setPassword}></LoginForm>}
 
       {user &&
         <div>
           <div>{user.name} has logged in <button onClick={handleLogout}>logout</button></div>
-          <BlogForm createBlog={createBlog} /> 
-          </div>}
-          <h2>blogs</h2>
-          {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user}/>
-          )}
+          <BlogForm createBlog={createBlog} />
+        </div>}
+      <h2>blogs</h2>
+      {blogs.map(blog =>
+        <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user} />
+      )}
     </div>
   )
 }
