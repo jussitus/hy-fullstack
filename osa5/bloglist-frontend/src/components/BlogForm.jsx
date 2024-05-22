@@ -1,5 +1,21 @@
-const BlogForm = ({addBlog, newBlog, handleBlogChange}) => {
-    return (
+import { useState } from "react"
+
+const BlogForm = ({createBlog}) => {
+    const [newBlog, setNewBlog] = useState({ title: '', author: '', url: ''})
+    const [shown, setShown] = useState(false)
+    
+    const handleBlogChange = async (event)=> {
+      const changedBlog = {...newBlog}
+      changedBlog[event.target.name] = event.target.value
+      setNewBlog(changedBlog)
+    }
+
+    const addBlog = (event) => {
+      event.preventDefault()
+      createBlog({...newBlog})
+      setNewBlog({ title: '', author: '', url: ''})
+    }
+    return shown ? (
     <form onSubmit={addBlog}>
       <div>title
       <input
@@ -22,8 +38,13 @@ const BlogForm = ({addBlog, newBlog, handleBlogChange}) => {
             onChange={handleBlogChange}
                   />
         </div>
+      <input type="hidden" name="blog" value={newBlog}/>
       <button type="submit">save</button>
+      <button type="button" onClick={() => setShown(false)}>cancel</button>
     </form>  
+  )
+  : (<button type="button" onClick={() => setShown(true)}>new blog</button>
+    
   )
 }
 

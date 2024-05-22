@@ -8,12 +8,12 @@ import loginService from './services/login'
 
 const App = () => {
   const [blogs, setBlogs] = useState([])
-  const [newBlog, setNewBlog] = useState({ title: '', author: '', url: ''})
   const [message, setMessage] = useState('')
   const [error, setError] = useState(false)
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
+  const [blogFormVisibility, setBlogFormVisibility] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
@@ -58,25 +58,22 @@ const App = () => {
     setUser(null)
   }
 
-  const handleBlogChange = async (event)=> {
-    const changedBlog = {...newBlog}
-    changedBlog[event.target.name] = event.target.value
-    setNewBlog(changedBlog)
-  }
-  const addBlog = async (event) => {
-    event.preventDefault()
-    const blogObject = {
-      ...newBlog
-    }
-    console.log(blogObject)
+  const createBlog = async (blogObject) => {
     const returnedBlog = await blogService.create(blogObject)
     setBlogs(blogs.concat(returnedBlog))
-    setNewBlog({ title: '', author: '', url: ''})
     setMessage(`New blog added: ${returnedBlog.title} by ${returnedBlog.author}`)
     setTimeout(() => {
       setMessage(null)
     }, 5000)
 
+  }
+
+  const updateBlog = async (blogObject) => {
+    const returnedBlog = await blogService.update(blogObject)
+    const updatedBlogs = [...blogs]
+    const index = updatedBlogs.findIndex(blog => blog.id === returnedBlog.id)
+    updatedBlogs[index] = returnedBlog
+    setBlogs(updatedBlogs)
   }
 
   return (
@@ -87,11 +84,11 @@ const App = () => {
 
       {user &&
         <div>
-          {user.name} has logged in <button onClick={handleLogout}>logout</button>
-          <BlogForm addBlog={addBlog} newBlog={newBlog} handleBlogChange={handleBlogChange}/>
+          <div>{user.name} has logged in <button onClick={handleLogout}>logout</button></div>
+          <BlogForm createBlog={createBlog} setBlogFormVisibility={setBlogFormVisibility} /> 
           <h2>blogs</h2>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
           )}
         </div>}
     </div>
