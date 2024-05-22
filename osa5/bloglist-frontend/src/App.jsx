@@ -13,11 +13,10 @@ const App = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
   const [user, setUser] = useState(null)
-  const [blogFormVisibility, setBlogFormVisibility] = useState(false)
 
   useEffect(() => {
     blogService.getAll().then(blogs =>
-      setBlogs(blogs)
+      setBlogs(blogs.toSorted((a, b) => b.likes - a.likes))
     )
   }, [])
 
@@ -34,7 +33,7 @@ const App = () => {
     event.preventDefault()
     try {
       const user = await loginService.login({
-        username, password,
+        username, password
       })
       window.localStorage.setItem('loggedUser', JSON.stringify(user))
       blogService.setToken(user.token)
@@ -73,9 +72,14 @@ const App = () => {
     const updatedBlogs = [...blogs]
     const index = updatedBlogs.findIndex(blog => blog.id === returnedBlog.id)
     updatedBlogs[index] = returnedBlog
-    setBlogs(updatedBlogs)
+    setBlogs(updatedBlogs.toSorted((a,b) => b.likes - a.likes))
   }
 
+  const removeBlog = async (blogObject) => {
+    await blogService.remove(blogObject)
+    const removedBlogs = [...blogs].filter(x => x.id !== blogObject.id)
+    setBlogs(removedBlogs)
+  }
   return (
     <div>
       <Notification message={message} error={error} />
@@ -85,12 +89,12 @@ const App = () => {
       {user &&
         <div>
           <div>{user.name} has logged in <button onClick={handleLogout}>logout</button></div>
-          <BlogForm createBlog={createBlog} setBlogFormVisibility={setBlogFormVisibility} /> 
+          <BlogForm createBlog={createBlog} /> 
+          </div>}
           <h2>blogs</h2>
           {blogs.map(blog =>
-            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} />
+            <Blog key={blog.id} blog={blog} updateBlog={updateBlog} removeBlog={removeBlog} user={user}/>
           )}
-        </div>}
     </div>
   )
 }
