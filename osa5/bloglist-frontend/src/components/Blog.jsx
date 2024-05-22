@@ -18,6 +18,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user}) => {
 
   const handleRemove = async (event) => {
     event.preventDefault()
+    if (window.confirm(`Really remove ${blog.title} by ${blog.author}?`))
     removeBlog(blog)
   }
   return shown 
