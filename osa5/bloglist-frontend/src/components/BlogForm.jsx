@@ -20,22 +20,33 @@ const BlogForm = ({ createBlog }) => {
     <form onSubmit={addBlog}>
       <div>
         title
-        <input name="title" value={newBlog.title} onChange={handleBlogChange} />
+        <input
+          name="title"
+          id="title-input"
+          value={newBlog.title}
+          onChange={handleBlogChange}
+        />
       </div>
       <div>
         author
         <input
           name="author"
+          id="author-input"
           value={newBlog.author}
           onChange={handleBlogChange}
         />
       </div>
       <div>
         url
-        <input name="url" value={newBlog.url} onChange={handleBlogChange} />
+        <input
+          name="url"
+          id="url-input"
+          value={newBlog.url}
+          onChange={handleBlogChange}
+        />
       </div>
       <input type="hidden" name="blog" value={newBlog} />
-      <button type="submit">save</button>
+      <button type="submit" id="save-button">save</button>
       <button type="button" onClick={() => setShown(false)}>
         cancel
       </button>

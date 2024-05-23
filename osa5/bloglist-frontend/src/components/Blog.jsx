@@ -24,14 +24,14 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
   return shown ? (
     <div style={style}>
       <div>
-        {blog.title}{" "}
+        {blog.title}
         <button type="button" onClick={() => setShown(false)}>
           hide
         </button>
       </div>
       <div>url: {blog.url}</div>
       <div>
-        likes: {blog.likes}{" "}
+        likes: {blog.likes}
         <button type="button" onClick={handleLike}>
           like
         </button>
@@ -47,7 +47,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
     </div>
   ) : (
     <div style={style}>
-      {blog.title} by {blog.author}{" "}
+      {blog.title} by {blog.author}
       <button type="button" onClick={() => setShown(true)}>
         view
       </button>

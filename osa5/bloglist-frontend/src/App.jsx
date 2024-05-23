@@ -109,7 +109,7 @@ const App = () => {
       {user && (
         <div>
           <div>
-            {user.name} has logged in{" "}
+            {user.name} has logged in
             <button onClick={handleLogout}>logout</button>
           </div>
           <BlogForm createBlog={createBlog} />
