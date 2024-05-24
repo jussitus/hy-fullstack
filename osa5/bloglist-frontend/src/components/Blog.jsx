@@ -22,7 +22,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
       removeBlog(blog);
   };
   return shown ? (
-    <div style={style}>
+    <div data-testid="blog-view-expanded" style={style}>
       <div>
         {blog.title}
         <button type="button" onClick={() => setShown(false)}>
@@ -46,7 +46,7 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
       </div>
     </div>
   ) : (
-    <div style={style}>
+    <div data-testid="blog-view-default" style={style}>
       {blog.title} by {blog.author}
       <button type="button" onClick={() => setShown(true)}>
         view

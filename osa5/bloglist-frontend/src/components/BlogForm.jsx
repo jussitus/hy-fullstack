@@ -21,6 +21,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         title
         <input
+          data-testid="title"
           name="title"
           id="title-input"
           value={newBlog.title}
@@ -30,6 +31,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         author
         <input
+          data-testid="author"
           name="author"
           id="author-input"
           value={newBlog.author}
@@ -39,6 +41,7 @@ const BlogForm = ({ createBlog }) => {
       <div>
         url
         <input
+          data-testid="url"
           name="url"
           id="url-input"
           value={newBlog.url}
@@ -46,7 +49,9 @@ const BlogForm = ({ createBlog }) => {
         />
       </div>
       <input type="hidden" name="blog" value={newBlog} />
-      <button type="submit" id="save-button">save</button>
+      <button type="submit" id="save-button">
+        save
+      </button>
       <button type="button" onClick={() => setShown(false)}>
         cancel
       </button>
