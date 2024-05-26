@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { Routes, Route, Link, useMatch, useNavigate } from "react-router-dom";
+import { useField } from "./hooks/index";
 
 const Menu = () => {
   const padding = {
@@ -81,32 +82,38 @@ const Footer = () => (
 
 const Notification = (props) => {
   const style = {
-    display: props.notification ? "initial" : "none"
-  }
-  return (
-    <div style={style}>{props.notification}</div>
-  )
-}
+    display: props.notification ? "initial" : "none",
+  };
+  return <div style={style}>{props.notification}</div>;
+};
 const CreateNew = (props) => {
-  const [content, setContent] = useState("");
-  const [author, setAuthor] = useState("");
-  const [info, setInfo] = useState("");
+  const content = useField("text");
+  const author = useField("text");
+  const info = useField("text");
   const navigate = useNavigate();
+
+  const noReset = ({reset, ...rest}) => rest
 
   const handleSubmit = (e) => {
     e.preventDefault();
     props.addNew({
-      content,
-      author,
-      info,
-      votes: 0,
+      content: content.value,
+      author: author.value,
+      info: info.value,
+      votes: 0
     });
     navigate("/");
-    props.setNotification(`a new anecdote created: "${content}"`)
+    props.setNotification(`a new anecdote created: "${content.value}"`);
     setTimeout(() => {
-      props.setNotification("")
-    }, 5000)
+      props.setNotification("");
+    }, 5000);
   };
+
+  const handleReset = () => {
+    content.reset()
+    author.reset()
+    info.reset()
+  }
 
   return (
     <div>
@@ -114,29 +121,18 @@ const CreateNew = (props) => {
       <form onSubmit={handleSubmit}>
         <div>
           content
-          <input
-            name="content"
-            value={content}
-            onChange={(e) => setContent(e.target.value)}
-          />
+          <input {...noReset(content)} />
         </div>
         <div>
           author
-          <input
-            name="author"
-            value={author}
-            onChange={(e) => setAuthor(e.target.value)}
-          />
+          <input {...noReset(author)} />
         </div>
         <div>
           url for more info
-          <input
-            name="info"
-            value={info}
-            onChange={(e) => setInfo(e.target.value)}
-          />
+          <input {...noReset(info)} />
         </div>
         <button>create</button>
+        <button type="button" onClick={handleReset}>reset</button>
       </form>
     </div>
   );
@@ -193,7 +189,12 @@ const App = () => {
           element={<Anecdote anecdote={anecdoteById} />}
         />
         <Route path="/" element={<AnecdoteList anecdotes={anecdotes} />} />
-        <Route path="/create" element={<CreateNew addNew={addNew} setNotification={setNotification}/>} />
+        <Route
+          path="/create"
+          element={
+            <CreateNew addNew={addNew} setNotification={setNotification} />
+          }
+        />
         <Route path="/about" element={<About />} />
       </Routes>
 
