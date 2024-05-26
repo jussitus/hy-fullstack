@@ -8,7 +8,7 @@ const Notification = () => {
     borderWidth: 1,
     display: notification ? "initial" : "none"
   };
-  return <div style={style}>{notification.message}</div>;
+  return <div style={style}>{notification}</div>;
 };
 
 export default Notification;
