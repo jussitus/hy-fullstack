@@ -1,9 +1,11 @@
 import { useState } from 'react'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
+import { useSelector } from 'react-redux'
 
-const Blog = ({ blog, user }) => {
+const Blog = ({ blog }) => {
   const dispatch = useDispatch()
+  const user = useSelector((state) => state.user)
   const [shown, setShown] = useState(false)
   const style = {
     border: 'solid',

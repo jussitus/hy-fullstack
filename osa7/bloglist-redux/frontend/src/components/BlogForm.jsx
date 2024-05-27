@@ -11,13 +11,13 @@ const BlogForm = () => {
     setNewBlog(changedBlog)
   }
   const dispatch = useDispatch()
-  const addBlog = (event) => {
+  const handleAddBlog = (event) => {
     event.preventDefault()
     dispatch(createBlog({ ...newBlog }))
     setNewBlog({ title: '', author: '', url: '' })
   }
   return shown ? (
-    <form onSubmit={addBlog}>
+    <form onSubmit={handleAddBlog}>
       <div>
         title
         <input

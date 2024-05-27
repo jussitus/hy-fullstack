@@ -49,7 +49,7 @@ blogsRouter.delete(
       'user',
       { username: 1, name: 1, id: 1 },
     )
-    response.status(204).json(result)
+    response.status(200).json(result)
   },
 )
 
