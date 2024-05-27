@@ -1,0 +1,10 @@
+POST http://localhost:3003/api/blogs 
+Content-Type: application/json
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ1c2VybmFtZSI6InVzZXJuYW1lIiwiaWQiOiI2NjRkMjMzMTZjNDM4OTQ1ODE2YmEwOTciLCJpYXQiOjE3MTYzMzE1MzEsImV4cCI6MTcxNjMzNTEzMX0.mW063bNaUxqxRbil7fUoF3Et_eZseFJd8ox6LzHZkVc
+
+{
+    "title": "Things are fine, people.",
+    "author": "Matt Mansfield",
+    "url": "google.com",
+    "likes": 10
+}
