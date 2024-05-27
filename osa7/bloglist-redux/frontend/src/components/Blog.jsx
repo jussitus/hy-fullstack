@@ -1,6 +1,9 @@
 import { useState } from 'react'
+import { removeBlog, likeBlog } from '../reducers/blogReducer'
+import { useDispatch } from 'react-redux'
 
-const Blog = ({ blog, updateBlog, removeBlog, user }) => {
+const Blog = ({ blog, user }) => {
+  const dispatch = useDispatch()
   const [shown, setShown] = useState(false)
   const style = {
     border: 'solid',
@@ -11,15 +14,13 @@ const Blog = ({ blog, updateBlog, removeBlog, user }) => {
 
   const handleLike = async (event) => {
     event.preventDefault()
-    const likedBlog = { ...blog }
-    likedBlog.likes += 1
-    updateBlog(likedBlog)
+    dispatch(likeBlog(blog))
   }
 
   const handleRemove = async (event) => {
     event.preventDefault()
     if (window.confirm(`Really remove ${blog.title} by ${blog.author}?`))
-      removeBlog(blog)
+      dispatch(removeBlog(blog))
   }
   return shown ? (
     <div data-testid="blog-view-expanded" style={style}>
