@@ -21,6 +21,7 @@ blogsRouter.post('/', middleware.userExtractor, async (request, response) => {
   const blog = new Blog({
     likes: request.body.likes || 0,
     user: user.id,
+    comments: [],
     ...request.body,
   })
   const result = await blog.save()
@@ -64,11 +65,30 @@ blogsRouter.put('/:id', async (request, response) => {
     title: request.body.title,
     url: request.body.url,
     likes: request.body.likes,
+    comments: request.body.comments,
   }
   const updatedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
     new: true,
   }).populate('user', { username: 1, name: 1, id: 1 })
   response.json(updatedBlog)
+})
+
+blogsRouter.put('/:id/comments', async (request, response) => {
+  const blogToComment = await Blog.findOne({ _id: request.params.id })
+  if (!blogToComment) {
+    return response.status(204).end()
+  }
+  const blog = {
+    author: request.body.blog.author,
+    title: request.body.blog.title,
+    url: request.body.blog.url,
+    likes: request.body.blog.likes,
+    comments: request.body.blog.comments.concat(request.body.comment),
+  }
+  const commentedBlog = await Blog.findByIdAndUpdate(request.params.id, blog, {
+    new: true,
+  }).populate('user', { username: 1, name: 1, id: 1 })
+  response.json(commentedBlog)
 })
 
 module.exports = blogsRouter

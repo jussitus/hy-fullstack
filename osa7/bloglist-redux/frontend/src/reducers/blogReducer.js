@@ -1,6 +1,7 @@
 import { createSlice } from '@reduxjs/toolkit'
 import blogService from '../services/blogs'
 import { setNotification } from './notificationReducer'
+import { addBlogToUser } from './userListReducer'
 
 const blogSlice = createSlice({
   name: 'blogs',
@@ -20,10 +21,16 @@ const blogSlice = createSlice({
     setBlogs(state, action) {
       return action.payload
     },
+    addComment(state, action) {
+      state
+        .find((blog) => blog.id === action.payload.blog.id)
+        .comments.push(action.payload.comment)
+    },
   },
 })
 
-const { addBlog, updateBlog, setBlogs, deleteBlog } = blogSlice.actions
+const { addBlog, updateBlog, setBlogs, deleteBlog, addComment } =
+  blogSlice.actions
 
 export const initializeBlogs = () => {
   return async (dispatch) => {
@@ -37,6 +44,7 @@ export const createBlog = (blog) => {
     try {
       const result = await blogService.create(blog)
       dispatch(addBlog(result))
+      dispatch(addBlogToUser(result))
       dispatch(
         setNotification({
           message: `New blog added: ${result.title} by ${result.author}`,
@@ -67,6 +75,13 @@ export const likeBlog = (blog) => {
     const updatedBlog = { ...blog, likes: blog.likes + 1 }
     const result = await blogService.update(updatedBlog)
     dispatch(updateBlog(result))
+  }
+}
+
+export const commentBlog = (blog, comment) => {
+  return async (dispatch) => {
+    await blogService.comment(blog, comment)
+    dispatch(addComment({ blog, comment }))
   }
 }
 

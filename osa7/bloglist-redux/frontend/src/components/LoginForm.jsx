@@ -2,6 +2,8 @@ import { login } from '../reducers/userReducer'
 import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { TextField, Button, Box } from '@mui/material'
+
 const LoginForm = () => {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
@@ -18,26 +20,31 @@ const LoginForm = () => {
     <form onSubmit={handleLogin}>
       <h1>Login</h1>
       <div>
-        username
-        <input
-          data-testid="username"
-          type="text"
-          value={username}
-          name="Username"
-          onChange={({ target }) => setUsername(target.value)}
-        />
+        <Box pb={2}>
+          <TextField
+            data-testid="username"
+            type="text"
+            value={username}
+            label="Username"
+            onChange={({ target }) => setUsername(target.value)}
+          />
+        </Box>
       </div>
       <div>
-        password
-        <input
-          data-testid="password"
-          type="password"
-          value={password}
-          name="Password"
-          onChange={({ target }) => setPassword(target.value)}
-        />
+        <Box pb={2}>
+          <TextField
+            data-testid="password"
+            type="password"
+            value={password}
+            label="Password"
+            onChange={({ target }) => setPassword(target.value)}
+          />
+        </Box>
       </div>
-      <button type="submit">login</button>
+
+      <Button variant="contained" color="primary" type="submit">
+        login
+      </Button>
     </form>
   )
 }

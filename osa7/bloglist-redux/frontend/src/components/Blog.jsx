@@ -1,19 +1,15 @@
 import { useState } from 'react'
-import { removeBlog, likeBlog } from '../reducers/blogReducer'
+import { removeBlog, likeBlog, commentBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
 import { useNavigate } from 'react-router-dom'
+import { List, ListItem, Button, Stack, TextField } from '@mui/material'
 
 const Blog = ({ blog }) => {
   const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
-  const style = {
-    border: 'solid',
-    borderWidth: 1,
-    padding: 5,
-    margin: 5,
-  }
+  const [comment, setComment] = useState('')
 
   const handleLike = async (event) => {
     event.preventDefault()
@@ -27,28 +23,63 @@ const Blog = ({ blog }) => {
     navigate('/blogs')
   }
 
+  const handleComment = async (event) => {
+    event.preventDefault()
+    dispatch(commentBlog(blog, comment))
+  }
   if (!blog) {
     return <div>Loading blog...</div>
   }
 
   return (
-    <div data-testid="blog-view-expanded" style={style}>
-      <div>{blog.title}</div>
-      <div>url: {blog.url}</div>
-      <div>
-        likes: {blog.likes}
-        <button type="button" onClick={handleLike}>
-          like
-        </button>
-      </div>
-      <div>author: {blog.author}</div>
-      <div>
-        {user && user.id === blog.user.id ? (
-          <button type="button" onClick={handleRemove}>
-            remove
-          </button>
-        ) : null}
-      </div>
+    <div>
+      <List>
+        <ListItem>{blog.title}</ListItem>
+        <ListItem>{blog.url}</ListItem>
+        <ListItem>liked by {blog.likes}</ListItem>
+        <ListItem>by {blog.author}</ListItem>
+        <ListItem>added by {blog.user.name}</ListItem>
+        <ListItem>
+          <Stack direction="row" spacing={2}>
+            <Button
+              color="primary"
+              variant="contained"
+              type="button"
+              onClick={handleLike}
+            >
+              like
+            </Button>
+            {user && user.id === blog.user.id && (
+              <Button
+                color="primary"
+                variant="contained"
+                type="button"
+                onClick={handleRemove}
+              >
+                remove
+              </Button>
+            )}
+          </Stack>
+        </ListItem>
+        <ListItem>
+          <form onSubmit={handleComment}>
+            <TextField
+              type="text"
+              value={comment}
+              onChange={({ target }) => setComment(target.value)}
+            />
+            <Button color="primary" variant="contained" type="submit">
+              comment
+            </Button>
+          </form>
+        </ListItem>
+      </List>
+      <List>
+        <h2>Comments</h2>
+        {blog.comments.map((comment) => (
+          <ListItem>{comment}</ListItem>
+        ))}
+      </List>
     </div>
   )
 }

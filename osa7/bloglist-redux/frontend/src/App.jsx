@@ -11,6 +11,7 @@ import { Routes, Route, Link, useMatch } from 'react-router-dom'
 import Blog from './components/Blog'
 import Users from './components/Users'
 import User from './components/User'
+import { Container, Toolbar, AppBar, Button } from '@mui/material'
 
 const App = () => {
   const dispatch = useDispatch()
@@ -43,22 +44,30 @@ const App = () => {
     : null
 
   return (
-    <div>
-      <div>
-        <Link to="/blogs">blogs</Link>
-        <Link to="/users">users</Link>
-        {user ? (
-          <>
-            {user.username} logged in
-            <button onClick={() => dispatch(logout())}>logout</button>
-          </>
-        ) : (
-          <Link to="/login">login</Link>
-        )}
-      </div>
+    <Container>
+      <AppBar position="static">
+        <Toolbar>
+          <Button color="inherit" component={Link} to="/blogs">
+            <h2>blogs</h2>
+          </Button>
+          <Button color="inherit" component={Link} to="/users">
+            <h2>users</h2>
+          </Button>
+          {user ? (
+            <>
+              <Button color="inherit" onClick={() => dispatch(logout())}>
+                <h2>logout</h2>
+              </Button>
+            </>
+          ) : (
+            <Button color="inherit" component={Link} to="/login">
+              <h2>login</h2>
+            </Button>
+          )}
+        </Toolbar>
+      </AppBar>
 
       <Notification />
-
       <Routes>
         <Route path="/blogs/:id" element={<Blog blog={blogbyId} />} />
         <Route path="/users/:id" element={<User user={userById} />} />
@@ -67,7 +76,7 @@ const App = () => {
         <Route path="/users" element={<Users />} />
         <Route path="/login" element={<LoginForm />} />
       </Routes>
-    </div>
+    </Container>
   )
 }
 
