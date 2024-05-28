@@ -41,28 +41,3 @@ const Users = () => {
 }
 
 export default Users
-
-{
-  //import { DataGrid } from '@mui/x-data-grid'
-  /* <DataGrid
-getRowId={(row) => Number(row.id)}
-rows={[
-  users.map((user) => ({
-    id: user.id,
-    name: user.name,
-    blogN: user.blogs.length,
-  })),
-]}
-columns={[
-  { field: 'name', headerName: 'Name' },
-  { field: 'blogN', headerName: 'blogs created' },
-]}
-initialState={{
-  pagination: {
-    paginationModel: { page: 0, pageSize: 5 },
-  },
-}}
-pageSizeOptions={[5, 10]}
-checkboxSelection
-/> */
-}

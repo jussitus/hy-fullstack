@@ -10,7 +10,7 @@ const userListSlice = createSlice({
     },
     updateUser(state, action) {
       state
-        .find((u) => u.id == action.payload.user.id)
+        .find((u) => u.id === action.payload.user.id)
         .blogs.push(action.payload)
     },
   },
