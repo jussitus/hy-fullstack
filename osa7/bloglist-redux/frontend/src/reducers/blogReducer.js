@@ -71,9 +71,3 @@ export const likeBlog = (blog) => {
 }
 
 export default blogSlice.reducer
-
-// const removeBlog = async (blogObject) => {
-//   await blogService.remove(blogObject)
-//   const removedBlogs = [...blogs].filter((x) => x.id !== blogObject.id)
-//   setBlogs(removedBlogs)
-// }

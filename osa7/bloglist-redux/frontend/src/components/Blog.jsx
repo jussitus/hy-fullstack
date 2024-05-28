@@ -2,11 +2,12 @@ import { useState } from 'react'
 import { removeBlog, likeBlog } from '../reducers/blogReducer'
 import { useDispatch } from 'react-redux'
 import { useSelector } from 'react-redux'
+import { useNavigate } from 'react-router-dom'
 
 const Blog = ({ blog }) => {
+  const navigate = useNavigate()
   const dispatch = useDispatch()
   const user = useSelector((state) => state.user)
-  const [shown, setShown] = useState(false)
   const style = {
     border: 'solid',
     borderWidth: 1,
@@ -23,15 +24,16 @@ const Blog = ({ blog }) => {
     event.preventDefault()
     if (window.confirm(`Really remove ${blog.title} by ${blog.author}?`))
       dispatch(removeBlog(blog))
+    navigate('/blogs')
   }
-  return shown ? (
+
+  if (!blog) {
+    return <div>Loading blog...</div>
+  }
+
+  return (
     <div data-testid="blog-view-expanded" style={style}>
-      <div>
-        {blog.title}
-        <button type="button" onClick={() => setShown(false)}>
-          hide
-        </button>
-      </div>
+      <div>{blog.title}</div>
       <div>url: {blog.url}</div>
       <div>
         likes: {blog.likes}
@@ -47,13 +49,6 @@ const Blog = ({ blog }) => {
           </button>
         ) : null}
       </div>
-    </div>
-  ) : (
-    <div data-testid="blog-view-default" style={style}>
-      {blog.title} by {blog.author}
-      <button type="button" onClick={() => setShown(true)}>
-        view
-      </button>
     </div>
   )
 }
