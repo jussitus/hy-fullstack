@@ -20,7 +20,20 @@ const resolvers = {
       }
       return query.populate('author')
     },
-    allAuthors: async () => Author.find({}),
+    allAuthors: async () => {
+      const res = await Author.aggregate([
+        {
+          $lookup: {
+            from: 'books',
+            localField: '_id',
+            foreignField: 'author',
+            as: 'bookCount',
+          },
+        },
+        { $addFields: { bookCount: { $size: '$bookCount' } } },
+      ])
+      return res
+    },
     me: async (root, args, context) => {
       const currentUser = context.currentUser
       if (!currentUser) {
@@ -34,7 +47,11 @@ const resolvers = {
     },
   },
   Author: {
+    id: (root) => root._id,
     bookCount: async (root) => {
+      if (root.bookCount) {
+        return root.bookCount
+      }
       const author = await Author.findOne({ name: root.name })
       return Book.collection.countDocuments({ author: author._id })
     },
