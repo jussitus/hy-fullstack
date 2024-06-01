@@ -3,7 +3,10 @@ import { useState } from 'react'
 import { ALL_AUTHORS, EDIT_AUTHOR } from '../queries'
 import Select from 'react-select'
 const Authors = (props) => {
-  const result = useQuery(ALL_AUTHORS, { skip: !props.show })
+  const result = useQuery(ALL_AUTHORS, {
+    skip: !props.show,
+    onError: (error) => console.log(error),
+  })
   const [editAuthor] = useMutation(EDIT_AUTHOR, {
     refetchQueries: [{ query: ALL_AUTHORS }],
   })
