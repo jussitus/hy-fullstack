@@ -1,4 +1,13 @@
 {
   "semi": false,
-  "singleQuote": true
-}
+  "singleQuote": true,
+  "overrides": [
+        {
+            "files": "**/*.ts",
+            "options": {
+                "semi": true,
+                "singleQuote": false
+            }
+        }
+    ]
+  }
