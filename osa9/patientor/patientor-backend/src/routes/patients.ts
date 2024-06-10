@@ -3,8 +3,18 @@ import patientService from "../services/patientService";
 import toNewPatient from "../utils";
 const router = express.Router();
 
+router.get("/:id", (req, res) => {
+  res.send(patientService.getPatient(req.params.id));
+});
+
 router.get("/", (_req, res) => {
-  res.send(patientService.getNonSensitivePatients());
+  try {
+    res.send(patientService.getNonSensitivePatients());
+  } catch (error: unknown) {
+    if (error instanceof Error) {
+      res.status(400).send(error.message);
+    }
+  }
 });
 
 router.post("/", (req, res) => {
